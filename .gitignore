@@ -1,5 +1,6 @@
 *~
 # Binaries for programs and plugins
+*.exe
 *.dll
 *.so
 *.dylib
@@ -12,3 +13,9 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+
+# Files generated using `page-maker` app
+generated/
+
+# Ignore generated object file
+page-maker
