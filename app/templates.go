@@ -16,29 +16,27 @@ const copyrightFooter = "" +
 	"// mode: dart\n" +
 	"// End:\n"
 
-// TODO: Need to interpolate component name during run-time.
-// TODO: The indentation is slightly off in generated file.
-const componentBody = `
+const componentBodyFormat = `
 import 'package:angular/angular.dart';
 import 'package:angular_router/angular_router.dart';
 
 @Component(
-  selector: 'my-component',
-  templateUrl: '',
+  selector: '{selector}',
+  templateUrl: '{templateUrl}',
   styleUrls: [],
   directives: [],
 )
-class MyComponent implements OnInit, OnActivate {
-  MyComponent();
+class {componentName} implements OnInit, OnActivate {
+  {componentName}();
 
   @override
   void ngOnInit() {
-	print('MyComponent: ngOnInit');
+    print('{componentName}: ngOnInit');
   }
 
   @override
-  void onActivate(RouterState prev, RouterState curr) {
-	print('MyComponent: onActivate');
+  void onActivate(RouterState prev, RouterState current) {
+    print('{componentName}: onActivate');
   }
 }
 

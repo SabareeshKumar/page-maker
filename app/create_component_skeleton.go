@@ -3,6 +3,7 @@ package app
 import (
 	"log"
 	"os"
+	"strings"
 )
 
 // Create directory: 'generated', if it doesn't exist.
@@ -28,8 +29,13 @@ func writeFile(f *os.File, data string) {
 }
 
 func createComponent() {
-	f, err := os.OpenFile("generated/new_component.dart",
-		os.O_RDWR|os.O_CREATE, 0755)
+	replacer := strings.NewReplacer(
+		"{selector}", selector,
+		"{templateUrl}", templateUrl,
+		"{componentName}", componentName)
+	componentBody := replacer.Replace(componentBodyFormat)
+
+	f, err := os.Create("generated/new_component.dart")
 	if err != nil {
 		log.Fatal(err)
 	}
