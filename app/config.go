@@ -1,6 +1,8 @@
 package app
 
-// Values that will be interpolated into component during creation
+// Component and template files will be generated here
+const generateDirectory = "/home/sabareesh/work/valar.repo/client/lib/src/fees_report"
+const fileNamePrefix = "my_component"
 const selector = "my-component"
-const templateUrl = "my_template.html"
 const componentName = "MyComponent"
+const expansionPanelName = "My Panel"

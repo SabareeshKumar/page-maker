@@ -1,21 +1,22 @@
 package app
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"strings"
 )
 
 // Create directory: 'generated', if it doesn't exist.
-func createGeneratedDirectory() {
-	err := os.Mkdir("generated", 0755)
+func createGenerateDirectory() {
+	err := os.Mkdir(generateDirectory, 0755)
 	if err == nil {
-		log.Println("Created directory: 'generated'")
+		log.Printf("Created directory: %s\n", generateDirectory)
 		return
 	}
 	if os.IsExist(err) {
-		log.Println("Directory 'generated' already exists.",
-			"Skipping creation...")
+		log.Printf("Directory %s already exists."+
+			" Skipping creation...\n", generateDirectory)
 		return
 	}
 	log.Fatal(err)
@@ -28,34 +29,54 @@ func writeFile(f *os.File, data string) {
 	}
 }
 
-func createComponent() {
-	replacer := strings.NewReplacer(
-		"{selector}", selector,
-		"{templateUrl}", templateUrl,
-		"{componentName}", componentName)
-	componentBody := replacer.Replace(componentBodyFormat)
-
-	f, err := os.Create("generated/new_component.dart")
+func createTemplateFile() {
+	fileName := fmt.Sprintf("%s/%s.html", generateDirectory, fileNamePrefix)
+	f, err := os.Create(fileName)
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println("Created component: new_component.dart")
+	log.Printf("Created template: %s\n", fileName)
 
-	writeFile(f, copyrightHeader)
-	log.Println("Wrote copyright header to new_component.dart")
-
-	writeFile(f, componentBody)
-	log.Println("Wrote component body to new_component.dart")
-
-	writeFile(f, copyrightFooter)
-	log.Println("Wrote copyright footer to new_component.dart")
+	writeFile(f, componentTemplateFormat)
+	log.Printf("Wrote template content to %s\n", fileName)
 
 	if err := f.Close(); err != nil {
 		log.Fatal(err)
 	}
 }
 
+func createComponent() {
+	createTemplateFile()
+	templateUrl := fmt.Sprintf("%s.html", fileNamePrefix)
+	replacer := strings.NewReplacer(
+		"{selector}", selector,
+		"{templateUrl}", templateUrl,
+		"{componentName}", componentName,
+		"{expansionPanelName}", expansionPanelName)
+	componentBody := replacer.Replace(componentBodyFormatWithPanel)
+	
+	fileName := fmt.Sprintf("%s/%s.dart", generateDirectory, fileNamePrefix)
+	f, err := os.Create(fileName)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Printf("Created component: %s\n", fileName)
+	
+	writeFile(f, copyrightHeader)
+	log.Printf("Wrote copyright header to %s\n", fileName)
+	
+	writeFile(f, componentBody)
+	log.Printf("Wrote component body to %s\n", fileName)
+	
+	writeFile(f, copyrightFooter)
+	log.Printf("Wrote copyright footer to %s\n", fileName)
+	
+	if err := f.Close(); err != nil {
+		log.Fatal(err)
+	}
+}
+
 func CreateComponentSkeleton() {
-	createGeneratedDirectory()
+	createGenerateDirectory()
 	createComponent()
 }
