@@ -1,9 +1,13 @@
 package main
 
 import (
-	"github.com/SabareeshKumar/page-maker/app"
+	"log"
+	"net/http"
 )
 
+const clientDir = "client/build/web"
+
 func main() {
-	app.CreateComponentSkeleton()
+	fileServer := http.FileServer(http.Dir(clientDir))
+	log.Fatal(http.ListenAndServe(":8080", fileServer))
 }
