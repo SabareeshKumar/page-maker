@@ -1,16 +1,25 @@
-name: angular_app
+name: page_maker
 description: A web app that uses AngularDart
 version: 0.0.1
 
 environment:
-  sdk: '>=2.2.0 <3.0.0'
+  sdk: '>=2.7.0 <3.0.0'
 
 dependencies:
-  angular: ^6.0.0-alpha
+  angular: ^5.3.1
+  angular_forms: ^2.1.2
+  angular_router: ^2.0.0-alpha+22
+  angular_components: ^0.13.0
+  http: ^0.12.0+2
+  stream_transform: ^0.0.19
+  build_config: ^0.4.0
+  js: ^0.6.0
 
 dev_dependencies:
-  angular_test: ^2.3.1
-  build_runner: ^1.5.1
+  build_runner: ^1.6.0
+  build_web_compilers: ^2.3.0
+  pedantic: ^1.8.0
+  angular_test: ^2.3.0
   build_test: ^0.10.8
-  build_web_compilers: ^2.1.0
-  test: ^1.6.4
+  test: ^1.6.0
+  built_html: ^0.1.0
