@@ -3,6 +3,7 @@ import 'package:angular_components/material_button/material_button.dart';
 import 'package:angular_router/angular_router.dart';
 
 import 'page_maker_service.dart';
+import 'route_paths.dart' as paths;
 
 @Component(
   selector: 'home',
@@ -19,8 +20,9 @@ import 'page_maker_service.dart';
 )
 class HomeComponent implements OnInit, OnActivate {
   final PageMakerService _service;
+  final Router _router;
 
-  HomeComponent(this._service);
+  HomeComponent(this._router, this._service);
 
   @override
   void ngOnInit() {
@@ -34,5 +36,9 @@ class HomeComponent implements OnInit, OnActivate {
 
   Future<void> createComponentSkeleton() async {
     await _service.createComponentSkeleton();
+  }
+
+  void createForm() {
+    _router.navigate(paths.createForm.toUrl());
   }
 }

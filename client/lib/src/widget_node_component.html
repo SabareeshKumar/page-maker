@@ -1,0 +1,7 @@
+<h3>Widget body</h3>
+<material-button *ngIf="!addedChild" raised no-ink (trigger)="addChild()"
+                 class="addBtn">
+  Add widget
+</material-button>
+<widget-node #nextNode *ngIf="addedChild"></widget-node>
+<div class="footer"></div>

@@ -1,6 +1,10 @@
 @import 'package:angular_components/css/material/material';
 
-.createBtn {
+.addBtn {
     color: $mat-white;
     background-color: $mat-blue;
+}
+
+.footer {
+    padding-bottom: $mat-grid * 2;
 }

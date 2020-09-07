@@ -1,0 +1,10 @@
+<material-expansionpanel
+  expanded alwaysHideExpandIcon disabled [cancelDisplayed]="false"
+  [closeOnSave]="false" (save)="save()" name="Create form">
+  <div action>
+    <material-button (trigger)="goToHome()" no-ink>
+      Home
+    </material-button>
+  </div>
+  <widget-node #rootWidget></widget-node>
+</material-expansionpanel>
