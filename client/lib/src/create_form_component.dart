@@ -5,6 +5,7 @@ import 'package:angular_router/angular_router.dart';
 
 import 'widget_node_component.dart';
 import 'route_paths.dart' as paths;
+import 'page_maker_service.dart';
 
 @Component(
   selector: 'create-form',
@@ -14,17 +15,21 @@ import 'route_paths.dart' as paths;
     MaterialExpansionPanel,
     WidgetNodeComponent,
   ],
+  providers: [
+    PageMakerService,
+  ],
   styleUrls: [
     'create_form_component.scss.css',
   ],
 )
 class CreateFormComponent implements OnInit, OnActivate {
   final Router _router;
+  final PageMakerService _service;
 
   @ViewChild('rootWidget')
   WidgetNodeComponent rootWidget;
 
-  CreateFormComponent(this._router);
+  CreateFormComponent(this._router, this._service);
 
   @override
   void ngOnInit() {
@@ -40,5 +45,16 @@ class CreateFormComponent implements OnInit, OnActivate {
     _router.navigate(paths.home.toUrl());
   }
 
-  void save() {}
+  Future<void> save() async {
+    final widgetTypes = <int>[];
+    var currNode = rootWidget;
+    while (currNode != null) {
+      final selectedWidgetType = currNode.selectedWidgetType;
+      if (selectedWidgetType != null) {
+        widgetTypes.add(selectedWidgetType.value);
+      }
+      currNode = currNode.nextNode;
+    }
+    await _service.createForm(widgetTypes);
+  }
 }

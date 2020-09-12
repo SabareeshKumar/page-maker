@@ -1,12 +1,19 @@
 import 'package:angular/angular.dart';
 import 'package:angular_router/angular_router.dart';
 
+import 'package:angular_components/material_input/material_auto_suggest_input.dart';
 import 'package:angular_components/material_button/material_button.dart';
+import 'package:angular_components/model/selection/selection_model.dart';
+import 'package:angular_components/model/selection/string_selection_options.dart';
+
+import 'int_enum.dart';
+import 'constants.dart';
 
 @Component(
   selector: 'widget-node',
   templateUrl: 'widget_node_component.html',
   directives: [
+    MaterialAutoSuggestInputComponent,
     MaterialButtonComponent,
     NgIf,
     WidgetNodeComponent,
@@ -16,7 +23,14 @@ import 'package:angular_components/material_button/material_button.dart';
   ],
 )
 class WidgetNodeComponent implements OnInit, OnActivate {
+  final widgetTypeOptions = StringSelectionOptions<IntEnum>(widgetTypes);
+  final widgetTypeSelectionModel = SelectionModel<IntEnum>.single();
+
   bool addedChild = false;
+
+  IntEnum get selectedWidgetType => widgetTypeSelectionModel.isEmpty
+      ? null
+      : widgetTypeSelectionModel.selectedValues.first;
 
   @ViewChild('nextNode')
   WidgetNodeComponent nextNode;
