@@ -16,7 +16,9 @@ func createComponentSkeleton(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 		return
 	}
-	app.CreateComponentSkeleton()
+	if err := app.CreateComponentSkeleton(); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+	}
 }
 
 func createForm(w http.ResponseWriter, req *http.Request) {
@@ -29,7 +31,8 @@ func createForm(w http.ResponseWriter, req *http.Request) {
 	decoder := json.NewDecoder(req.Body)
 	widgetTypes := make([]int, 0)
 	if err := decoder.Decode(&widgetTypes); err != nil {
-		log.Fatal(err)
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
 	log.Printf("Got widget types: %v", widgetTypes)
 	if err := app.CreateForm(widgetTypes); err != nil {

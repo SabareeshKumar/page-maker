@@ -8,3 +8,12 @@ const (
 	materialToggle           = 5
 	materialCheckbox         = 6
 )
+
+var widgetTypes = enum{
+	materialInput,
+	materialAutoSuggestInput,
+	materialDatepicker,
+	materialRadio,
+	materialToggle,
+	materialCheckbox,
+}
