@@ -48,8 +48,7 @@ const panelTitleDeclaration = "String title = '{expansionPanelName}'"
 const expansionPanelTemplate = `<material-expansionpanel
   alwaysHideExpandIcon expanded disabled [showSaveCancel]="false" 
   [name]="title">
-  {body}
-</material-expansionpanel>
+  {body}</material-expansionpanel>
 `
 const spinnerImport = ("" +
 	"import 'package:angular_components/material_spinner/material_spinner.dart'")
@@ -69,6 +68,7 @@ const materialInputTemplate = `<div>
   </material-input>
 </div>
 `
+const materialAutoSuggestInputDirective = "MaterialAutoSuggestInputComponent"
 const materialAutoSuggestInputTemplate = `<div>
   <material-auto-suggest-input
     label="Search text" [selection]="{selection}"
@@ -77,7 +77,12 @@ const materialAutoSuggestInputTemplate = `<div>
   </material-auto-suggest-input>
 </div>
 `
-const materialDatePickerTemplate = `<div>
+const selectionModelDeclaration = "final {selection} = SelectionModel.single()"
+const selectionOptionsDeclaration = ("" +
+	"final {selectionOptions} = StringSelectionOptions([])")
+const materialDatepickerDirective = "MaterialDatepickerComponent"
+const materialDatepickerDeclaration = "Date {varName}"
+const materialDatepickerTemplate = `<div>
   <material-datepicker
     selectDatePlaceHolderMsg="Select date" [(date)]="{date}">
   </material-datepicker>
@@ -89,3 +94,13 @@ var angularImports = [...]string{
 	"import 'package:angular_router/angular_router.dart'",
 }
 var spinnerDirectives = [...]string{"NgIf", "MaterialSpinnerComponent"}
+var materialAutoSuggestInputImports = [...]string{
+	"import 'package:angular_components/model/selection/selection_model.dart'",
+	("import 'package:angular_components" +
+		"/model/selection/string_selection_options.dart'"),
+}
+var materialDatepickerImports = [...]string{
+	("import 'package:angular_components" +
+		"/material_datepicker/material_datepicker.dart'"),
+	"import 'package:angular_components/model/date/date.dart'",
+}
