@@ -94,7 +94,7 @@ func CreateForm(widgetTypeList []int) error {
 	directives := append(m.directives, panelDirective)
 	directives = append(directives, spinnerDirectives[:]...)
 	panelDeclaration := strings.ReplaceAll(
-		panelTitleDeclaration, "{expansionPanelName}", "My form")
+		panelTitleDeclaration, "{expansionPanelName}", expansionPanelName)
 	declarations := append(m.declarations, panelDeclaration, spinnerDeclaration)
 	tmpl := m.templateBody.String()
 	tmpl = strings.ReplaceAll(
