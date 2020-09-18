@@ -60,7 +60,6 @@ const spinnerTemplate = `<div *ngIf="dataFetchInProgress">
 `
 const materialInputImport = ("" +
 	"import 'package:angular_components/material_input/material_input.dart'")
-const materialInputDirective = "MaterialInputComponent"
 const materialInputDeclaration = "String {varName}"
 const materialInputTemplate = `<div>
   <material-input
@@ -94,7 +93,14 @@ var angularImports = [...]string{
 	"import 'package:angular_router/angular_router.dart'",
 }
 var spinnerDirectives = [...]string{"NgIf", "MaterialSpinnerComponent"}
+var materialInputDirectives = [...]string{
+	"materialInputDirectives",
+	"MaterialInputComponent",
+	"NgModel",
+}
 var materialAutoSuggestInputImports = [...]string{
+	("import 'package:angular_components/" +
+		"material_input/material_auto_suggest_input.dart'"),
 	"import 'package:angular_components/model/selection/selection_model.dart'",
 	("import 'package:angular_components" +
 		"/model/selection/string_selection_options.dart'"),

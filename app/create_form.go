@@ -19,7 +19,7 @@ func handleMaterialInputGeneration(m *meta, widgetType int) {
 	count, _ := m.widgetTypeCount[widgetType]
 	if count == 0 {
 		m.imports = append(m.imports, materialInputImport)
-		m.directives = append(m.directives, materialInputDirective)
+		m.directives = append(m.directives, materialInputDirectives[:]...)
 	}
 	varName := fmt.Sprintf("input%d", count+1)
 	declaration := strings.ReplaceAll(
