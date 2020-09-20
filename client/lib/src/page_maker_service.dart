@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart';
 
 import 'api_urls.dart' as api_urls;
+import 'input_meta.dart';
 
 class PageMakerService {
   final Client _http;
@@ -14,12 +15,14 @@ class PageMakerService {
     return response.statusCode != 200;
   }
 
-  Future<bool> createForm(List<int> widgetTypes) async {
-    if (widgetTypes.isEmpty) {
-      print('Selected widget types are empty. Skipping API call...');
+  Future<bool> createForm(List<InputMeta> inputMetaList) async {
+    if (inputMetaList.isEmpty) {
+      print('Input meta list is empty. Skipping API call...');
       return true;
     }
-    final payload = json.encode(widgetTypes);
+    final serializedMetaList =
+        List.generate(inputMetaList.length, (i) => inputMetaList[i].toJson());
+    final payload = json.encode(serializedMetaList);
     final response = await _http.post(api_urls.createForm, body: payload);
     return response.statusCode != 200;
   }

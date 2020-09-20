@@ -3,9 +3,10 @@ import 'package:angular_components/material_button/material_button.dart';
 import 'package:angular_components/material_expansionpanel/material_expansionpanel.dart';
 import 'package:angular_router/angular_router.dart';
 
-import 'widget_node_component.dart';
-import 'route_paths.dart' as paths;
+import 'input_meta.dart';
 import 'page_maker_service.dart';
+import 'route_paths.dart' as paths;
+import 'widget_node_component.dart';
 
 @Component(
   selector: 'create-form',
@@ -46,15 +47,15 @@ class CreateFormComponent implements OnInit, OnActivate {
   }
 
   Future<void> save() async {
-    final widgetTypes = <int>[];
+    final inputMetaList = <InputMeta>[];
     var currNode = rootWidget;
     while (currNode != null) {
-      final selectedWidgetType = currNode.widgetType;
-      if (selectedWidgetType != null) {
-        widgetTypes.add(selectedWidgetType.value);
+      final inputMeta = currNode.inputMeta;
+      if (inputMeta != null) {
+        inputMetaList.add(inputMeta);
       }
       currNode = currNode.nextNode;
     }
-    await _service.createForm(widgetTypes);
+    await _service.createForm(inputMetaList);
   }
 }

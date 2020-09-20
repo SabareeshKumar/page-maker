@@ -63,7 +63,7 @@ const materialInputImport = ("" +
 const materialInputDeclaration = "String {varName}"
 const materialInputTemplate = `<div>
   <material-input
-    label="Enter text" type="text" [(ngModel)]="{ngModel}" floatingLabel>
+    label="Enter text" type="text" [(ngModel)]="{varName}" floatingLabel>
   </material-input>
 </div>
 `

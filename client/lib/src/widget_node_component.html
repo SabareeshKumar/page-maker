@@ -1,14 +1,23 @@
-<div>
-  <material-auto-suggest-input
-    label="Select widget type" hintText="Widget type"
-    [(selection)]="widgetType" [selectionOptions]="widgetTypeOptions"
-    filterSuggestions popupMatchInputWidth showClearIcon
-    [displayBottomPanel]="false">
-  </material-auto-suggest-input>
+<div class="grid">
+  <div>
+    <material-input
+      label="Input label" type="text" [(ngModel)]="inputMeta.inputLabel"
+      floatingLabel>
+    </material-input>
+  </div>
+  <div>
+    <material-auto-suggest-input
+      label="Widget type" [(selection)]="inputMeta.widgetType"
+      [selectionOptions]="widgetTypeOptions" floatingLabel filterSuggestions
+      popupMatchInputWidth showClearIcon>
+    </material-auto-suggest-input>
+  </div>
+  <div>
+    <material-button *ngIf="!addedChild" raised no-ink (trigger)="addChild()"
+                     class="addBtn">
+      Add widget
+    </material-button>
+  </div>
 </div>
-<material-button *ngIf="!addedChild" raised no-ink (trigger)="addChild()"
-                 class="addBtn">
-  Add widget
-</material-button>
 <widget-node #nextNode *ngIf="addedChild"></widget-node>
 <div class="footer"></div>

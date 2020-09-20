@@ -29,13 +29,13 @@ func createForm(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 	decoder := json.NewDecoder(req.Body)
-	widgetTypes := make([]int, 0)
-	if err := decoder.Decode(&widgetTypes); err != nil {
+	decoder.DisallowUnknownFields()
+	var form app.CreateFormSchema
+	if err := decoder.Decode(&form); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	log.Printf("Got widget types: %v", widgetTypes)
-	if err := app.CreateForm(widgetTypes); err != nil {
+	if err := app.CreateForm(form); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 	}
 }

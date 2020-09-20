@@ -7,90 +7,100 @@ import (
 	"strings"
 )
 
-type meta struct {
-	widgetTypeCount map[int]int
-	imports         []string
-	directives      []string
-	declarations    []string
-	templateBody    bytes.Buffer
+type InputMeta struct {
+	InputLabel string `json:"input_label"`
+	WidgetType int    `json:"widget_type"`
 }
 
-func handleMaterialInputGeneration(m *meta, widgetType int) {
-	count, _ := m.widgetTypeCount[widgetType]
-	if count == 0 {
-		m.imports = append(m.imports, materialInputImport)
-		m.directives = append(m.directives, materialInputDirectives[:]...)
-	}
-	varName := fmt.Sprintf("input%d", count+1)
+type CreateFormSchema []InputMeta
+
+type generationMeta struct {
+	widgetEncountered map[int]bool
+	imports           []string
+	directives        []string
+	declarations      []string
+	templateBody      bytes.Buffer
+}
+
+var widgetGeneratorMap = map[int]func(*generationMeta, InputMeta){
+	materialInput:            materialInputGenerator,
+	materialAutoSuggestInput: autoSuggestInputGenerator,
+	materialDatepicker:       datepickerGenerator,
+}
+
+func materialInputGenerator(gm *generationMeta, inputMeta InputMeta) {
+	varName := mixedCaps(inputMeta.InputLabel)
 	declaration := strings.ReplaceAll(
 		materialInputDeclaration, "{varName}", varName)
-	m.declarations = append(m.declarations, declaration)
+	gm.declarations = append(gm.declarations, declaration)
 	template := strings.ReplaceAll(
-		materialInputTemplate, "{ngModel}", varName)
-	m.templateBody.WriteString(template)
-	m.widgetTypeCount[widgetType] = count + 1
+		materialInputTemplate, "{varName}", varName)
+	gm.templateBody.WriteString(template)
+	if gm.widgetEncountered[inputMeta.WidgetType] {
+		return
+	}
+	gm.imports = append(gm.imports, materialInputImport)
+	gm.directives = append(gm.directives, materialInputDirectives[:]...)
+	gm.widgetEncountered[inputMeta.WidgetType] = true
+
 }
 
-func handleMaterialAutoSuggestInputGeneration(m *meta, widgetType int) {
-	count, _ := m.widgetTypeCount[widgetType]
-	if count == 0 {
-		m.imports = append(m.imports, materialAutoSuggestInputImports[:]...)
-		m.directives = append(m.directives, materialAutoSuggestInputDirective)
-	}
-	varName := fmt.Sprintf("selectionInput%d", count+1)
+func autoSuggestInputGenerator(gm *generationMeta, inputMeta InputMeta) {
+	varName := mixedCaps(inputMeta.InputLabel)
 	for _, declaration := range materialAutoSuggestInputDeclarations {
 		declaration := strings.ReplaceAll(declaration, "{varName}", varName)
-		m.declarations = append(m.declarations, declaration)
+		gm.declarations = append(gm.declarations, declaration)
 	}
 	template := strings.ReplaceAll(
 		materialAutoSuggestInputTemplate, "{varName}", varName)
-	m.templateBody.WriteString(template)
-	m.widgetTypeCount[widgetType] = count + 1
+	gm.templateBody.WriteString(template)
+	if gm.widgetEncountered[inputMeta.WidgetType] {
+		return
+	}
+	gm.imports = append(gm.imports, materialAutoSuggestInputImports[:]...)
+	gm.directives = append(gm.directives, materialAutoSuggestInputDirective)
+	gm.widgetEncountered[inputMeta.WidgetType] = true
 }
 
-func handleMaterialDatepickerGeneration(m *meta, widgetType int) {
-	count, _ := m.widgetTypeCount[widgetType]
-	if count == 0 {
-		m.imports = append(m.imports, materialDatepickerImports[:]...)
-		m.directives = append(m.directives, materialDatepickerDirective)
-	}
-	varName := fmt.Sprintf("date%d", count+1)
+func datepickerGenerator(gm *generationMeta, inputMeta InputMeta) {
+	varName := mixedCaps(inputMeta.InputLabel)
 	declaration := strings.ReplaceAll(
 		materialDatepickerDeclaration, "{varName}", varName)
-	m.declarations = append(m.declarations, declaration)
+	gm.declarations = append(gm.declarations, declaration)
 	template := strings.ReplaceAll(
 		materialDatepickerTemplate, "{date}", varName)
-	m.templateBody.WriteString(template)
-	m.widgetTypeCount[widgetType] = count + 1
+	gm.templateBody.WriteString(template)
+	if gm.widgetEncountered[inputMeta.WidgetType] {
+		return
+	}
+	gm.imports = append(gm.imports, materialDatepickerImports[:]...)
+	gm.directives = append(gm.directives, materialDatepickerDirective)
+	gm.widgetEncountered[inputMeta.WidgetType] = true
 }
 
-var widgetGenerationHandler = map[int]func(*meta, int){
-	materialInput:            handleMaterialInputGeneration,
-	materialAutoSuggestInput: handleMaterialAutoSuggestInputGeneration,
-	materialDatepicker:       handleMaterialDatepickerGeneration,
-}
-
-func CreateForm(widgetTypeList []int) error {
-	for _, wType := range widgetTypeList {
+func CreateForm(form CreateFormSchema) error {
+	for _, inputMeta := range form {
+		wType := inputMeta.WidgetType
 		if widgetTypes.hasValue(wType) {
 			continue
 		}
 		errorStr := fmt.Sprintf("Invalid widget type '%d'", wType)
 		return errors.New(errorStr)
 	}
-	m := meta{widgetTypeCount: make(map[int]int)}
-	m.templateBody.WriteString(spinnerTemplate)
-	for _, wType := range widgetTypeList {
-		widgetGenerationHandler[wType](&m, wType)
+	gm := generationMeta{widgetEncountered: make(map[int]bool)}
+	gm.templateBody.WriteString(spinnerTemplate)
+	for _, inputMeta := range form {
+		widgetGeneratorMap[inputMeta.WidgetType](&gm, inputMeta)
 	}
-	imports := append(m.imports, panelImport, spinnerImport)
+	imports := append(gm.imports, panelImport, spinnerImport)
 	imports = append(imports, angularImports[:]...)
-	directives := append(m.directives, panelDirective)
+	directives := append(gm.directives, panelDirective)
 	directives = append(directives, spinnerDirectives[:]...)
 	panelDeclaration := strings.ReplaceAll(
 		panelTitleDeclaration, "{expansionPanelName}", expansionPanelName)
-	declarations := append(m.declarations, panelDeclaration, spinnerDeclaration)
-	tmpl := m.templateBody.String()
+	declarations := append(
+		gm.declarations, panelDeclaration, spinnerDeclaration)
+	tmpl := gm.templateBody.String()
 	tmpl = strings.ReplaceAll(
 		expansionPanelTemplate, "{body}", tmpl)
 	return createComponent(imports, directives, declarations, tmpl)
