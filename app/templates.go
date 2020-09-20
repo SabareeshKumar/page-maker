@@ -70,15 +70,12 @@ const materialInputTemplate = `<div>
 const materialAutoSuggestInputDirective = "MaterialAutoSuggestInputComponent"
 const materialAutoSuggestInputTemplate = `<div>
   <material-auto-suggest-input
-    label="Search text" [selection]="{selection}"
-    [selectionOptions]="{selectionOptions}" [displayBottomPanel]="false"
+    label="Search text" [(selection)]="{varName}"
+    [selectionOptions]="{varName}Options" [displayBottomPanel]="false"
     floatingLabel filterSuggestions showClearIcon popupMatchInputWidth>
   </material-auto-suggest-input>
 </div>
 `
-const selectionModelDeclaration = "final {selection} = SelectionModel.single()"
-const selectionOptionsDeclaration = ("" +
-	"final {selectionOptions} = StringSelectionOptions([])")
 const materialDatepickerDirective = "MaterialDatepickerComponent"
 const materialDatepickerDeclaration = "Date {varName}"
 const materialDatepickerTemplate = `<div>
@@ -104,6 +101,10 @@ var materialAutoSuggestInputImports = [...]string{
 	"import 'package:angular_components/model/selection/selection_model.dart'",
 	("import 'package:angular_components" +
 		"/model/selection/string_selection_options.dart'"),
+}
+var materialAutoSuggestInputDeclarations = [...]string{
+	"final {varName}Options = StringSelectionOptions([])",
+	"String {varName}",
 }
 var materialDatepickerImports = [...]string{
 	("import 'package:angular_components" +

@@ -24,13 +24,9 @@ import 'constants.dart';
 )
 class WidgetNodeComponent implements OnInit, OnActivate {
   final widgetTypeOptions = StringSelectionOptions<IntEnum>(widgetTypes);
-  final widgetTypeSelectionModel = SelectionModel<IntEnum>.single();
+  IntEnum widgetType;
 
   bool addedChild = false;
-
-  IntEnum get selectedWidgetType => widgetTypeSelectionModel.isEmpty
-      ? null
-      : widgetTypeSelectionModel.selectedValues.first;
 
   @ViewChild('nextNode')
   WidgetNodeComponent nextNode;

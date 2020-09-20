@@ -49,7 +49,7 @@ class CreateFormComponent implements OnInit, OnActivate {
     final widgetTypes = <int>[];
     var currNode = rootWidget;
     while (currNode != null) {
-      final selectedWidgetType = currNode.selectedWidgetType;
+      final selectedWidgetType = currNode.widgetType;
       if (selectedWidgetType != null) {
         widgetTypes.add(selectedWidgetType.value);
       }

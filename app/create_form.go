@@ -37,19 +37,13 @@ func handleMaterialAutoSuggestInputGeneration(m *meta, widgetType int) {
 		m.imports = append(m.imports, materialAutoSuggestInputImports[:]...)
 		m.directives = append(m.directives, materialAutoSuggestInputDirective)
 	}
-	selectionModelName := fmt.Sprintf("selection%d", count+1)
-	selectionOptionsName := fmt.Sprintf("selectionOptions%d", count+1)
-	declarationModel := strings.ReplaceAll(
-		selectionModelDeclaration, "{selection}", selectionModelName)
-	declarationOptions := strings.ReplaceAll(
-		selectionOptionsDeclaration, "{selectionOptions}",
-		selectionOptionsName)
-	m.declarations = append(
-		m.declarations, declarationModel, declarationOptions)
+	varName := fmt.Sprintf("selectionInput%d", count+1)
+	for _, declaration := range materialAutoSuggestInputDeclarations {
+		declaration := strings.ReplaceAll(declaration, "{varName}", varName)
+		m.declarations = append(m.declarations, declaration)
+	}
 	template := strings.ReplaceAll(
-		materialAutoSuggestInputTemplate, "{selection}", selectionModelName)
-	template = strings.ReplaceAll(
-		template, "{selectionOptions}", selectionOptionsName)
+		materialAutoSuggestInputTemplate, "{varName}", varName)
 	m.templateBody.WriteString(template)
 	m.widgetTypeCount[widgetType] = count + 1
 }

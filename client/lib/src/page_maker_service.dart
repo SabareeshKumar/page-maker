@@ -16,6 +16,7 @@ class PageMakerService {
 
   Future<bool> createForm(List<int> widgetTypes) async {
     if (widgetTypes.isEmpty) {
+      print('Selected widget types are empty. Skipping API call...');
       return true;
     }
     final payload = json.encode(widgetTypes);

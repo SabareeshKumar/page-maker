@@ -1,7 +1,7 @@
 <div>
   <material-auto-suggest-input
     label="Select widget type" hintText="Widget type"
-    [selection]="widgetTypeSelectionModel" [selectionOptions]="widgetTypeOptions"
+    [(selection)]="widgetType" [selectionOptions]="widgetTypeOptions"
     filterSuggestions popupMatchInputWidth showClearIcon
     [displayBottomPanel]="false">
   </material-auto-suggest-input>
