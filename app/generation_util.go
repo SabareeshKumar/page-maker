@@ -8,6 +8,25 @@ import (
 	"strings"
 )
 
+type declarationList []string
+
+func (dl declarationList) Len() int {
+	return len(dl)
+}
+
+func (dl declarationList) Less(i, j int) bool {
+	iFinal := strings.HasPrefix(dl[i], "final")
+	jFinal := strings.HasPrefix(dl[j], "final")
+	if iFinal != jFinal {
+		return iFinal
+	}
+	return dl[i] < dl[j]
+}
+
+func (dl declarationList) Swap(i, j int) {
+	dl[i], dl[j] = dl[j], dl[i]
+}
+
 // Create directory: 'generated', if it doesn't exist.
 func createGenerateDirectory() {
 	err := os.Mkdir(generateDirectory, 0755)
@@ -45,13 +64,18 @@ func createTemplate(templateBody string) error {
 func createComponent(
 	imports, directives, declarations []string, templateBody string) error {
 	createGenerateDirectory()
-	sortAndJoin := func(a []string, sep, suffix string) string {
-		sort.Strings(a)
-		return strings.Join(a, sep) + suffix
+	sortAndJoin := func(
+		sorter func([]string), a []string, sep, suffix string) string {
+		sorter(a)
+		return strings.Join([]string(a), sep) + suffix
 	}
-	importsStr := sortAndJoin(imports, ";\n", ";")
-	directivesStr := sortAndJoin(directives, ",\n    ", ",")
-	declarationsStr := sortAndJoin(declarations, ";\n  ", ";")
+	declarationSorter := func(decl []string) {
+		sort.Sort(declarationList(decl))
+	}
+	importsStr := sortAndJoin(sort.Strings, imports, ";\n", ";")
+	directivesStr := sortAndJoin(sort.Strings, directives, ",\n    ", ",")
+	declarationsStr := sortAndJoin(
+		declarationSorter, declarations, ";\n  ", ";")
 	templateUrl := fmt.Sprintf("%s.html", fileNamePrefix)
 	replacer := strings.NewReplacer(
 		"{selector}", selector,
