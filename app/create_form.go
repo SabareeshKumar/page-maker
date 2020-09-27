@@ -7,11 +7,13 @@ import (
 	"strings"
 )
 
+// InputMeta is the widget meta schema in create-form request
 type InputMeta struct {
 	InputLabel string `json:"input_label"`
 	WidgetType int    `json:"widget_type"`
 }
 
+// CreateFormSchema is the schema of create-form request data
 type CreateFormSchema []InputMeta
 
 type generationMeta struct {
@@ -82,6 +84,8 @@ func datepickerGenerator(gm *generationMeta, inputMeta InputMeta) {
 	gm.widgetEncountered[inputMeta.WidgetType] = true
 }
 
+// CreateForm creates angular-dart component and template files with necessary
+// imports, declarations and directives of given widgets.
 func CreateForm(form CreateFormSchema) error {
 	for _, inputMeta := range form {
 		wType := inputMeta.WidgetType

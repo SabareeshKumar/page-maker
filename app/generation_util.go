@@ -76,10 +76,10 @@ func createComponent(
 	directivesStr := sortAndJoin(sort.Strings, directives, ",\n    ", ",")
 	declarationsStr := sortAndJoin(
 		declarationSorter, declarations, ";\n  ", ";")
-	templateUrl := fmt.Sprintf("%s.html", fileNamePrefix)
+	templateURL := fmt.Sprintf("%s.html", fileNamePrefix)
 	replacer := strings.NewReplacer(
 		"{selector}", selector,
-		"{templateUrl}", templateUrl,
+		"{templateUrl}", templateURL,
 		"{componentName}", componentName,
 		"{imports}", importsStr,
 		"{directives}", directivesStr,

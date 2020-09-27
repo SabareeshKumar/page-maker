@@ -4,6 +4,8 @@ import (
 	"strings"
 )
 
+// CreateComponentSkeleton creates a basic angular-dart component with an
+// expansion-panel.
 func CreateComponentSkeleton() error {
 	imports := append(angularImports[:], panelImport, spinnerImport)
 	directives := append(spinnerDirectives[:], panelDirective)
