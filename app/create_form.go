@@ -35,6 +35,8 @@ func materialInputGenerator(gm *generationMeta, inputMeta InputMeta) {
 	gm.declarations = append(gm.declarations, declaration)
 	template := strings.ReplaceAll(
 		materialInputTemplate, "{varName}", varName)
+	label := strings.Title(inputMeta.InputLabel)
+	template = strings.ReplaceAll(template, "{label}", label)
 	gm.templateBody.WriteString(template)
 	if gm.widgetEncountered[inputMeta.WidgetType] {
 		return
@@ -53,6 +55,8 @@ func autoSuggestInputGenerator(gm *generationMeta, inputMeta InputMeta) {
 	}
 	template := strings.ReplaceAll(
 		materialAutoSuggestInputTemplate, "{varName}", varName)
+	label := strings.Title(inputMeta.InputLabel)
+	template = strings.ReplaceAll(template, "{label}", label)
 	gm.templateBody.WriteString(template)
 	if gm.widgetEncountered[inputMeta.WidgetType] {
 		return

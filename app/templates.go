@@ -63,14 +63,14 @@ const materialInputImport = ("" +
 const materialInputDeclaration = "String {varName}"
 const materialInputTemplate = `<div>
   <material-input
-    label="Enter text" type="text" [(ngModel)]="{varName}" floatingLabel>
+    label="{label}" type="text" [(ngModel)]="{varName}" floatingLabel>
   </material-input>
 </div>
 `
 const materialAutoSuggestInputDirective = "MaterialAutoSuggestInputComponent"
 const materialAutoSuggestInputTemplate = `<div>
   <material-auto-suggest-input
-    label="Search text" [(selection)]="{varName}"
+    label="{label}" [(selection)]="{varName}"
     [selectionOptions]="{varName}Options" [displayBottomPanel]="false"
     floatingLabel filterSuggestions showClearIcon popupMatchInputWidth>
   </material-auto-suggest-input>
