@@ -1,0 +1,17 @@
+@import 'package:angular_components/css/material/material';
+
+.addBtn {
+    color: $mat-white;
+    background-color: $mat-blue;
+}
+
+.footer {
+    padding-bottom: $mat-grid * 2;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 300px 300px 300px;
+    padding: $mat-grid;
+    align-items: center;
+}

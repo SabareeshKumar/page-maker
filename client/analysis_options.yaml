@@ -1,0 +1,21 @@
+# Defines a default set of lint rules enforced for
+# projects at Google. For details and rationale,
+# see https://github.com/dart-lang/pedantic#enabled-lints.
+include: package:pedantic/analysis_options.yaml
+
+analyzer:
+  exclude: [.*/**, build/**] # https://github.com/dart-lang/sdk/issues/33112
+  strong-mode: true
+  errors:
+    uri_has_not_been_generated: ignore
+  plugins:
+    - angular
+
+# Lint rules and documentation, see http://dart-lang.github.io/linter/lints
+linter:
+  rules:
+    - cancel_subscriptions
+    - hash_and_equals
+    - iterable_contains_unrelated_type
+    - list_remove_unrelated_type
+    - test_types_in_equals

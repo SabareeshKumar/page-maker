@@ -1,0 +1,23 @@
+<div class="grid">
+  <div>
+    <material-input
+      label="Input label" type="text" [(ngModel)]="inputMeta.inputLabel"
+      floatingLabel>
+    </material-input>
+  </div>
+  <div>
+    <material-auto-suggest-input
+      label="Widget type" [(selection)]="inputMeta.widgetType"
+      [selectionOptions]="widgetTypeOptions" floatingLabel filterSuggestions
+      popupMatchInputWidth showClearIcon>
+    </material-auto-suggest-input>
+  </div>
+  <div>
+    <material-button *ngIf="!addedChild" raised no-ink (trigger)="addChild()"
+                     class="addBtn">
+      Add widget
+    </material-button>
+  </div>
+</div>
+<widget-node #nextNode *ngIf="addedChild"></widget-node>
+<div class="footer"></div>

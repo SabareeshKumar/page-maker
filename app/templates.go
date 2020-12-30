@@ -9,58 +9,23 @@ const copyrightHeader = `// Copyright (C) 2018-2020 HiPro IT Solutions Private L
 // distribution or for further clarifications, please contact
 // legal@hipro.co.in.
 `
-
 const copyrightFooter = `// Local Variables:
 // mode: dart
 // End:
 `
-
 const componentBodyFormat = `
-import 'package:angular/angular.dart';
-import 'package:angular_router/angular_router.dart';
-
-@Component(
-  selector: '{selector}',
-  templateUrl: '{templateUrl}',
-  styleUrls: [],
-  directives: [],
-)
-class {componentName} implements OnInit, OnActivate {
-  {componentName}();
-
-  @override
-  void ngOnInit() {
-    print('{componentName}: ngOnInit');
-  }
-
-  @override
-  void onActivate(RouterState prev, RouterState current) {
-    print('{componentName}: onActivate');
-  }
-}
-
-`
-
-const componentBodyFormatWithPanel = `
-import 'package:angular/angular.dart';
-import 'package:angular_router/angular_router.dart';
-
-import 'package:angular_components/material_expansionpanel/material_expansionpanel.dart';
-import 'package:angular_components/material_spinner/material_spinner.dart';
+{imports}
 
 @Component(
   selector: '{selector}',
   templateUrl: '{templateUrl}',
   styleUrls: [],
   directives: [
-    MaterialExpansionPanel,
-    MaterialSpinnerComponent,
-    NgIf,
+    {directives}
   ],
 )
 class {componentName} implements OnInit, OnActivate {
-  bool dataFetchInProgress = false;
-  String title = "{expansionPanelName}";
+  {declarations}
 
   {componentName}();
 
@@ -76,13 +41,73 @@ class {componentName} implements OnInit, OnActivate {
 }
 
 `
-
-const componentTemplateFormat = `<material-expansionpanel
+const panelImport = ("import 'package:angular_components" +
+	"/material_expansionpanel/material_expansionpanel.dart'")
+const panelDirective = "MaterialExpansionPanel"
+const panelTitleDeclaration = "String title = '{expansionPanelName}'"
+const expansionPanelTemplate = `<material-expansionpanel
   alwaysHideExpandIcon expanded disabled [showSaveCancel]="false" 
   [name]="title">
-  <div *ngIf="dataFetchInProgress">
-    <div>Loading...</div>
-    <material-spinner></material-spinner>
-  </div>
-</material-expansionpanel>
+  {body}</material-expansionpanel>
 `
+const spinnerImport = ("" +
+	"import 'package:angular_components/material_spinner/material_spinner.dart'")
+const spinnerDeclaration = "bool dataFetchInProgress = false"
+const spinnerTemplate = `<div *ngIf="dataFetchInProgress">
+  <div>Loading...</div>
+  <material-spinner></material-spinner>
+</div>
+`
+const materialInputImport = ("" +
+	"import 'package:angular_components/material_input/material_input.dart'")
+const materialInputDeclaration = "String {varName}"
+const materialInputTemplate = `<div>
+  <material-input
+    label="{label}" type="text" [(ngModel)]="{varName}" floatingLabel>
+  </material-input>
+</div>
+`
+const materialAutoSuggestInputDirective = "MaterialAutoSuggestInputComponent"
+const materialAutoSuggestInputTemplate = `<div>
+  <material-auto-suggest-input
+    label="{label}" [(selection)]="{varName}"
+    [selectionOptions]="{varName}Options" [displayBottomPanel]="false"
+    floatingLabel filterSuggestions showClearIcon popupMatchInputWidth>
+  </material-auto-suggest-input>
+</div>
+`
+const materialDatepickerDirective = "MaterialDatepickerComponent"
+const materialDatepickerDeclaration = "Date {varName}"
+const materialDatepickerTemplate = `<div>
+  <material-datepicker
+    selectDatePlaceHolderMsg="Select date" [(date)]="{date}">
+  </material-datepicker>
+</div>
+`
+
+var angularImports = [...]string{
+	"import 'package:angular/angular.dart'",
+	"import 'package:angular_router/angular_router.dart'",
+}
+var spinnerDirectives = [...]string{"NgIf", "MaterialSpinnerComponent"}
+var materialInputDirectives = [...]string{
+	"materialInputDirectives",
+	"MaterialInputComponent",
+	"NgModel",
+}
+var materialAutoSuggestInputImports = [...]string{
+	("import 'package:angular_components/" +
+		"material_input/material_auto_suggest_input.dart'"),
+	"import 'package:angular_components/model/selection/selection_model.dart'",
+	("import 'package:angular_components" +
+		"/model/selection/string_selection_options.dart'"),
+}
+var materialAutoSuggestInputDeclarations = [...]string{
+	"final {varName}Options = StringSelectionOptions([])",
+	"String {varName}",
+}
+var materialDatepickerImports = [...]string{
+	("import 'package:angular_components" +
+		"/material_datepicker/material_datepicker.dart'"),
+	"import 'package:angular_components/model/date/date.dart'",
+}

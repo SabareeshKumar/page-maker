@@ -1,0 +1,19 @@
+targets:
+  $default:
+    builders:
+      angular_components|scss_builder:
+        enabled: True
+      build_web_compilers|dart2js_archive_extractor:
+        options:
+          filter_outputs: false
+      build_web_compilers|entrypoint:
+        generate_for:
+          - web/main.dart
+        options:
+          dart2js_args:
+            - --enable-asserts
+            - --fast-startup
+            - --minify
+            - --omit-implicit-checks
+            - --trust-primitives
+            - --dump-info
